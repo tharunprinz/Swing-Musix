@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Music Generation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+            background-image: url(https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D);
+            background-size: cover;
+            top: 0;
+            left: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            background: transparent;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #music-container {
+            margin-top: 20px;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        select, button {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 50px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+        }
+
+        h1{
+            color: orange;
+        }
+        h2{
+            color:darkturquoise;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>SWING MUSIX</h1>
+        <h2>Intelligent Music Suggesting System</h2>
+        <div id="music-container">
+            <select id="mood-selector">
+                <option value="happy">Happy</option>
+                <option value="sad">Sad</option>
+                <option value="energetic">Energetic</option>
+                <option value="all">Manual</option>
+                <!-- Add more mood options as needed -->
+            </select>
+            <button onclick="generateMusic()">Generate Music</button>
+            <audio id="music-player" controls onended="playNextSong()"></audio>
+            <button onclick="startVoiceRecognition()">AI Voice Assist</button>
+        </div>
+    </div>
+
+    <script>
+        var audioPlayer = document.getElementById("music-player");
+
+        function generateMusic() {
+            // Get the selected mood
+            var moodSelector = document.getElementById("mood-selector");
+            var selectedMood = moodSelector.value;
+
+            // Check if the selected mood is "All"
+            if (selectedMood === "all") {
+                // Let the user choose a file
+                var fileInput = document.createElement("input");
+                fileInput.type = "file";
+                fileInput.accept = "audio/*";
+                fileInput.addEventListener("change", function (event) {
+                    var file = event.target.files[0];
+                    if (file) {
+                        // Set the source of the audio player to the selected file
+                        audioPlayer.src = URL.createObjectURL(file);
+
+                        // Load and play the audio
+                        audioPlayer.load();
+                        audioPlayer.play();
+                    }
+                });
+
+                // Trigger the file input click
+                fileInput.click();
+            } else {
+                // Define an array of songs for each mood
+                var moodSongs = {
+                    "happy": [
+                        "/Users/tharunr/Music/Music/Media.localized/Music/Compilations/Raja Rani - MassTamilan.com/03 Chillena - MassTamilan.com.mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/Compilations/Yaan - MassTamilan.com/02 Aathangara Orathil - MassTamilan.com.mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/PagalWorldl.Com/Instagram Reels Mp3 Songs - PagalWorldl.Com/You And I(PagalWorldl).mp3",
+                        "/Users/tharunr/.Trash/My Heart Stereo(PagalWorld).mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/PagalWorldl.Com/Slowed Reverb Mp3 Songs - PagalWorldl.Com/Snap (Slowed and Reverb)(PagalWorldl).mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/PaglaSongs.Com/Viral Mp3 Songs - PaglaSongs.Com/Your Body Language Speaks To Me(PaglaSongs).mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/www.DJMaza.Live/English Viral Mp3 Songs - www.DJMaza.Live/Infinity - Jaymes Young-(DJMaza).mp3"
+                        // Add more songs as needed
+                    ],
+                    "sad": [
+                        "/Users/tharunr/Music/Music/Media.localized/Music/Compilations/Oru Kal Oru Kannadi - MassTamilan.com/05 Venaam Machan - MassTamilan.com.mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/Kalsel FYS (PaglaSongs.Com)/Tik Tok Mp3 Songs - PaglaSongs.Com/Mockingbird(PaglaSongs).mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/Harris Jayaraj - MassTamilan.com/7 Aam Arivu - MassTamilan.com/04 Yamma Yamma - MassTamilan.com.mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/Linkin Park (PaglaSongs.Com)/English Mp3 Songs - PaglaSongs.Com/In The End(PaglaSongs).mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/PagaliWorld.Com/English Mp3 Songs - PagaliWorld.Com/Lovely(PagalWorld).mp3"
+                        // Add more songs as needed
+                    ],
+                    "energetic": [
+                        "/Users/tharunr/Music/Music/Media.localized/Music/Alan Walker, Sabrina Carpenter & Farruko/On My Way/On My Way.mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/Earl (pagalworld.com)/All That Glitters/All That Glitters.mp3",
+                        "/Users/tharunr/Music/Music/Media.localized/Music/PagalWorldi.Com/_Instagram Reels Songs - PagalWorldi.Com/Gangsta's Paradise(PagalWorld).mp3"
+                        // Add more songs as needed
+                    ],
+                    // Add more mood mappings as needed
+                };
+
+                // Randomly select a song from the array associated with the selected mood
+                var randomIndex = Math.floor(Math.random() * moodSongs[selectedMood].length);
+                var selectedSong = moodSongs[selectedMood][randomIndex];
+
+                // Set the source of the audio player to the selected song
+                audioPlayer.src = selectedSong;
+
+                // Load and play the audio
+                audioPlayer.load();
+                audioPlayer.play();
+            }
+        }
+
+        function startVoiceRecognition() {
+            var recognition = new webkitSpeechRecognition(); // for webkit browsers
+            recognition.onresult = function(event) {
+                var result = event.results[0][0].transcript.toLowerCase();
+                var moodSelector = document.getElementById("mood-selector");
+
+                // Map spoken words to mood options
+                var spokenWordsToMood = {
+                    "happy": ["happy", "joyful","play happy songs","play joyful songs"],
+                    "sad": ["sad", "melancholy","play sad songs","play healing songs"],
+                    "energetic": ["energetic", "active","play motivational songs","play gym songs" ],
+                    "all": ["all","manual","manual access","access manual songs","play the songs manually"],
+                };
+
+                // Check if the spoken words match any mood
+                for (var mood in spokenWordsToMood) {
+                    if (spokenWordsToMood[mood].includes(result)) {
+                        moodSelector.value = mood;
+                        generateMusic();
+                        break;
+                    }
+                }
+            };
+
+            recognition.start();
+        }
+
+        function playNextSong() {
+            // Automatically play the next song when the current song ends
+            generateMusic();
+        }
+    </script>
+</body>
+</html>
